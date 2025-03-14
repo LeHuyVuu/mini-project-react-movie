@@ -15,6 +15,7 @@ import Offer from '../pages/BookingMovie/Offer/Offer'
 import Payment from '../pages/BookingMovie/Payment/Payment'
 import ExportTicket from '../pages/BookingMovie/ExportTicket/ExportTicket'
 
+
 const MainRoutes = () => {
     return (
         <BrowserRouter>
@@ -30,7 +31,7 @@ const MainRoutes = () => {
 
                     <Route path='/booking' element={<BookingMovie />} />
                     <Route path='/booking/ticketinfor' element={<TicketInfo />} />
-                    <Route path='/booking/bookingseat' element={<BookingSeat />} />
+                        <Route path='/booking/bookingseat' element={<BookingSeat />} />
                     <Route path='/booking/offer' element={<Offer />} />
                     <Route path='/booking/payment' element={<Payment />} />
                     <Route path='/booking/exportticket' element={<ExportTicket />} />
