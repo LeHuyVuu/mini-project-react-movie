@@ -3,15 +3,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
 const Movie = (props) => {
-    const { data: { imageLandscape, name, startDate, overview, id, rate, totalVotes } } = props;
+    const { data } = props;
 
-    if (!props.data) {
+    if (!data) {
         return null; // Trả về null nếu data không tồn tại
     }
+
+    const {
+        id,
+        name,
+        age,
+        duration,
+        startDate,
+        endDate,
+        imageLandscape,
+        imagePortrait,
+        slug,
+        rate,
+        totalVotes,
+        views,
+        cityIds,
+        isImax,
+        isSession,
+        order,
+        createdAt,
+        overview
+    } = data;
 
     return (
         <div className="relative">
             {/* Sử dụng imageLandscape từ dữ liệu JSON */}
+            <h1 className='text-red-500'>{id} ---- id here</h1>
             <img
                 src={imageLandscape}
                 alt={name}
@@ -22,24 +44,44 @@ const Movie = (props) => {
                 <p className="font-extrabold text-3xl lg:text-5xl leading-tight tracking-wide sm:text-[3vw] mb-2 drop-shadow-md">
                     {name}
                 </p>
-
+                
                 {/* Ngày phát hành */}
                 <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    {startDate}
+                    Start Date: {startDate}
+                </p>
+                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
+                    End Date: {endDate}
                 </p>
 
+                {/* Thông tin bổ sung */}
+                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
+                    Age Rating: {age}+
+                </p>
+                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
+                    Duration: {duration} min
+                </p>
+                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
+                    Views: {views}
+                </p>
+                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
+                    IMAX: {isImax ? "Yes" : "No"}
+                </p>
+                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
+                    Session Available: {isSession ? "Yes" : "No"}
+                </p>
+                
                 {/* Rating và tổng lượt vote */}
                 <div className="flex items-center text-[1.2vw] lg:text-base text-gray-300">
                     <p className="font-semibold mr-2">Rating:</p>
                     <p>{rate} / 10 ({totalVotes} votes)</p>
                 </div>
-
+                
                 {/* Overview */}
                 <div className="hidden sm:block text-[1.2vw] lg:text-base text-gray-200 mb-3 mt-4 leading-relaxed">
                     <p className="font-semibold mb-2">Overview</p>
                     <p className="line-clamp-3">{overview}</p>
                 </div>
-
+                
                 {/* Button */}
                 <div className="mt-4">
                     <Link to={`/movie/${id}`}>
