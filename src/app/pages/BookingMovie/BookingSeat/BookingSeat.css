@@ -3,7 +3,7 @@
     min-height: 100vh;
     padding: 40px 0;
     text-align: center;
-    font-family: 'Quicksand', Arial, sans-serif;
+    /* font-family: 'Quicksand', Arial, sans-serif; */
 
     color: #fff;
     background-color: #111;
@@ -31,7 +31,7 @@
 
             td {
                 margin: 0;
-                padding: 0 5px;
+                padding: 0 4px;
                 width: 50px;
                 font-weight: bold;
                 cursor: pointer;
@@ -60,5 +60,15 @@
         align-content: center;
         font-size: 32px;
         font-weight: bold;
+    }
+
+    .btn {
+        display: block;
+        justify-self: end;
+        margin: 10px 60px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+        background-color: #dc3545;
     }
 }

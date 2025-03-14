@@ -57,11 +57,11 @@ export default function BookingMovie() {
         <div className='bookingmovie-container'>
             <h1>BOOKING MOVIE</h1>
 
-            <Link to={'ticketinfor'}>ticketinfor</Link>
-            <Link to={'bookingseat'}>bookingseat</Link>
-            <Link to={'offer'}>offer</Link>
-            <Link to={'payment'}>payment</Link>
-            <Link to={'exportticket'}>exportticket</Link>
+            <Link to={'ticketinfor'}>TicketInfor</Link>
+            <Link to={'bookingseat'}>BookingSeat</Link>
+            <Link to={'offer'}>Offer</Link>
+            <Link to={'payment'}>Payment</Link>
+            <Link to={'exportticket'}>ExportTicket</Link>
 
             <form className='form-group'>
                 <h2>Choose Theater</h2>
