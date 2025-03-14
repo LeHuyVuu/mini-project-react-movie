@@ -1,60 +1,86 @@
-import React, { useEffect, useState } from 'react';
-import './Offer.css';
+import React, { useState } from 'react';
 
-
-
-
- const ComboFood = [
-    { Id: 1, Name: 'Combo 1', Detail: '1 Popcorn + 1 Pepsi', Price: 35000 },
-    { Id: 2, Name: 'Combo 2', Detail: '1 Popcorn + 2 Pepsi', Price: 50000 },
-    { Id: 3, Name: 'Combo 3', Detail: '2 Popcorn + 2 Pepsi', Price: 70000 },
-    { Id: 4, Name: 'Combo 4', Detail: '3 Popcorn + 2 Pepsi', Price: 90000 },
+const combos = [
+  {
+    id: 1,
+    name: "Combo 1 - Popcorn & Drink Small",
+    description: "A small popcorn and drink combo",
+    price: 50,
+    image: "https://example.com/small-combo.jpg",
+  },
+  {
+    id: 2,
+    name: "Combo 2 - Popcorn & Drink Medium",
+    description: "A medium popcorn and drink combo",
+    price: 70,
+    image: "https://example.com/medium-combo.jpg",
+  },
+  {
+    id: 3,
+    name: "Combo 3 - Popcorn & Drink Large",
+    description: "A large popcorn and drink combo",
+    price: 90,
+    image: "https://example.com/large-combo.jpg",
+  },
 ];
 
- export default function Offer(props) {
+export default function Offer() {
+  const [quantities, setQuantities] = useState({
+    1: 0,
+    2: 0,
+    3: 0,
+  });
 
-    const [ChosenFood, setChosenFood] = useState([]);
-    useEffect(() => {
-        props.onFoodChange(ChosenFood);
-    }, [ChosenFood]);
+  const handleQuantityChange = (comboId, change) => {
+    setQuantities((prevQuantities) => {
+      const newQuantity = prevQuantities[comboId] + change;
+      if (newQuantity >= 0) {
+        return { ...prevQuantities, [comboId]: newQuantity };
+      }
+      return prevQuantities; // Prevent negative quantity
+    });
+  };
 
-    const AddFood = (Id) => {
-        setChosenFood(prev => [...prev, Id]);
-    }
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Chọn Combo</h1>
 
-    const SubtractFood = (Id) => {
-        const index = ChosenFood.findIndex(item => item === Id);
-        if (index !== -1) {
-            setChosenFood(prev => [...prev.slice(0, index), ...prev.slice(index + 1)]);
-        }
-    }
+      {/* Display combos as a list */}
+      <div className="space-y-4">
+        {combos.map((combo) => (
+          <div
+            key={combo.id}
+            className="border p-4 flex items-center space-x-4 rounded-md bg-white shadow-md"
+          >
+            <img src={combo.image} alt={combo.name} className="w-32 h-32 object-cover rounded-md" />
+            <div className="flex-grow">
+              <h3 className="font-semibold text-xl">{combo.name}</h3>
+              <p className="text-gray-500 text-sm">{combo.description}</p>
+              <p className="font-bold text-lg">{combo.price} VND</p>
+            </div>
 
-    return (
-        <div className='bookingfood-container'>
-            <h2>Choose Combo</h2>
-            {ComboFood.map((food, index) => (
-                <div key={index} className='food-item'>
-                    <div className='img-detail'>
-                        <img src="https://cdn.galaxycine.vn/media/2025/2/24/interstellar-2_1740384209787.jpg" alt='ComboFood'></img>
-                        <div className='detail'>
-                            <h3>{food.Name}</h3>
-                            <p>{food.Detail}</p>
-                            <p>Price: {food.Price} VND</p>
-                        </div>
-                    </div>
-                    <div className='button'>
-                        <button className='btn' onClick={() => SubtractFood(food.Id)}>-</button>
-                        <span style={{ backgroundColor: ChosenFood.filter(chosen => chosen === food.Id).length !== 0 ? '#dc3545' : '' }}>
-                            {ChosenFood.filter(chosen => chosen === food.Id).length}
-                        </span>
-                        <button className='btn' onClick={() => AddFood(food.Id)}>+</button>
-                    </div>
-                </div>
-            ))}
-        </div>
-    )
+            {/* Quantity controls */}
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => handleQuantityChange(combo.id, -1)}
+                className="px-3 py-1 bg-gray-300 rounded-full"
+              >
+                -
+              </button>
+              <span>{quantities[combo.id]}</span>
+              <button
+                onClick={() => handleQuantityChange(combo.id, 1)}
+                className="px-3 py-1 bg-gray-300 rounded-full"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
-
 
 
 // Đây là component hiển thị ra các combo bắp nước 💕
