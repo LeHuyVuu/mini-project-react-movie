@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './BookingMovie.css';
 
-import BookingSeat from './BookingSeat';
-import FoodPNG from './ComboFood.png';
+import BookingSeat from './BookingSeat/BookingSeat';
+import FoodPNG from '../../assets/img/ComboFood.png';
 import { AvailableTime, ComboFood, TypeOfTicket } from './data';
 
 export default function BookingMovie() {
@@ -55,6 +56,12 @@ export default function BookingMovie() {
     return (
         <div className='bookingmovie-container'>
             <h1>BOOKING MOVIE</h1>
+
+            <Link to={'ticketinfor'}>ticketinfor</Link>
+            <Link to={'bookingseat'}>bookingseat</Link>
+            <Link to={'offer'}>offer</Link>
+            <Link to={'payment'}>payment</Link>
+            <Link to={'exportticket'}>exportticket</Link>
 
             <form className='form-group'>
                 <h2>Choose Theater</h2>
@@ -176,11 +183,6 @@ export default function BookingMovie() {
                     </tbody>
                 </table>
             </div>
-
-            <BookingSeat
-                total_ticket={Ticket.Child + Ticket.Adult + Ticket.AdultCouple}
-                onSeatCountChange={handleSeatCountChange}
-            />
 
             <div className='food-container'>
                 <h2>Choose Combo</h2>
