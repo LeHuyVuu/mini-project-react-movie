@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: local('NetflixSans-Regular'),
+    url('./fonts/NetflixSans-Regular.woff2') format('woff2');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: local('NetflixSans-Bold'),
+    url('./fonts/NetflixSans-Bold.woff2') format('woff2');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Netflix Sans';
+  src: local('NetflixSans-Light'),
+    url('./fonts/NetflixSans-Light.woff2') format('woff2');
+  font-weight: 300;
+}
+
+
+body {
+  font-family: 'Netflix Sans';
+}
+
+.movie {
+  transition: opacity 0.5s ease-in-out;
+  /* Mượt mà khi thay đổi opacity */
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  /* Ban đầu ẩn movie */
+}
+
+.movie.active {
+  opacity: 1;
+  /* Hiển thị khi active */
+}
+
+
