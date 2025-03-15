@@ -1,15 +1,12 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { groupBy } from "lodash";
+import { useParams } from "react-router-dom";
 import LoadingComponents from "../../components/FeatureMovies/LoadingComponents";
 import Banner from "../../components/MediaDetail/Banner";
-import ActorList from "../../components/MediaDetail/ActorList";
-import InfomationMedia from "../../components/MediaDetail/InfomationMedia";
 import RelatedMovieList from "../../components/MediaDetail/RelatedMovieList";
 
 // Import data từ các file JSON
-import dataMovies from "../../../mocks/movies.json";
 import dataMoviesCooming from "../../../mocks/comming.json";
+import dataMovies from "../../../mocks/movies.json";
 
 export const MovieDetail = () => {
     const { id } = useParams();  // Lấy id từ URL params

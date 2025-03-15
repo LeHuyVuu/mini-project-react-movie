@@ -9,7 +9,7 @@ const MediaList = ({ TABS, Title }) => {
 
 
     const mediaList = (dataMovies.data.result || []);
-   
+
     const mediaListCooming = (dataMoviesCooming.data.result || []);
 
 
@@ -22,34 +22,31 @@ const MediaList = ({ TABS, Title }) => {
 
     return (
         <>
-            <div className="bg-black px-[150px] py-4">
+            {/* <div className="bg-black px-[150px] py-4">
                 <div className=" justify-center  py-2 bg-blue-100  rounded-xl  flex items-center gap-3 ">
                     <div className="object-fit overflow-hidden w-[80px] h-[60px] rounded-full bg-white flex items-center justify-center">
                         <img src="https://i.pinimg.com/736x/a8/32/79/a8327903ea0fd4f21512621aea8c01c2.jpg"></img>
                     </div>
-                    {/* Select Theater */}
                     <select className="px-3 py-2 border rounded text-black font-semibold">
                         <option>Select Theater</option>
                     </select>
 
-                    {/* Select Movie */}
+                  
                     <select className="px-3 py-2 border rounded text-black font-semibold">
                         <option>Select Movie</option>
                     </select>
 
-                    {/* Select Date */}
-                    <select className="px-3 py-2 border rounded text-black font-semibold">
+=                    <select className="px-3 py-2 border rounded text-black font-semibold">
                         <option>Select Date</option>
                     </select>
 
 
 
-                    {/* Booking Button */}
-                    <button className="bg-gray-600 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-400">
+\                    <button className="bg-gray-600 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-400">
                         BOOKING
                     </button>
                 </div>
-            </div>
+            </div> */}
 
             <div className="px-8 py-10 bg-black text-white">
                 <div className="flex flex-col items-start gap-4">
