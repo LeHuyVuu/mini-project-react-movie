@@ -20,22 +20,20 @@ export const Header = () => {
 
   return (
     <div >
-      <header className="h-14 lg:h-20 bg-black flex justify-between items-center px-4 sm:px-6 lg:px-8 text-white relative">
+      <header className="h-14 lg:h-20 bg-black flex justify-between  px-4 sm:px-6 lg:px-8 text-white relative">
         {/* Logo và Menu chính giữa */}
-        <div
-          className={`flex items-center gap-4 transform transition-all duration-700 ease-in-out ${hasMounted ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"
-            }`}
-        >
-          {/* Logo */}
+        
+            {/* Logo */}
           <Link to="/">
             <img
-              src="src\app\assets\img\hell.jpg"
-              className="w-8 sm:w-10 lg:w-12 hover:scale-110 transition-transform duration-300 ease-in-out rounded-full"
+              src="src\app\assets\img\jurassic.jpg"
+              className="w-8 sm:w-10 lg:w-12 rounded-full"  // Xóa các lớp liên quan đến hiệu ứng zoom
               alt="Logo"
             />
           </Link>
-          
-         
+
+
+
           {/* <nav className="hidden sm:flex gap-4">
             <a
               href="#"
@@ -50,15 +48,15 @@ export const Header = () => {
               TV Show
             </a>
           </nav> */}
+        
+        {/* Menu chính giữa */}
+        <div className="text-xl font-bold font-sans ">
+          <Link className=" mr-5 hover:text-red-400" to="/"> Movies</Link>
+          <Link className=" mr-5 hover:text-red-400" to="/Theaters"> Theaters</Link>
+          <Link className=" mr-5 hover:text-red-400" to="/Discount"> Discount</Link>
+          <Link className=" mr-5 hover:text-red-400" to="/Contact"> Contact</Link>
+          <Link className=" mr-5 hover:text-green-500 text-yellow-500" to="/booking"> <  img className=" inline-block w-20" src="src\app\assets\img\ticket.png"/></Link>
         </div>
-         {/* Menu chính giữa */}
-        <div className="text-xl font-bold ">
-            <Link className=" mr-5 hover:text-red-400" to="/"> Movies</Link>
-            <Link className=" mr-5 hover:text-red-400" to="/Theaters"> Theaters</Link>
-            <Link className=" mr-5 hover:text-red-400" to="/discount"> Discount</Link>
-            <Link className=" mr-5 hover:text-red-400" to="/contact-us"> Contact</Link>
-            <Link className=" mr-5 hover:text-green-500 text-yellow-500" to="/booking/ticketinfor"> BOOK NOW</Link>
-          </div>
         {/* Nút Search bên phải cho màn hình lớn */}
         <div
           className={`hidden sm:flex items-center gap-2 relative transform transition-all duration-700 ease-in-out ${hasMounted ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
@@ -125,7 +123,7 @@ export const Header = () => {
                 className="bg-gray-800 text-white px-4 py-2 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500 w-full"
               />
             </div>
-            
+
           </div>
         )}
       </header>
