@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useModalContext } from "../../context/ModalProvider";
 import { CircularProgressBar } from "../MediaList/CircularProgressBar";
-import { faPlay, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { faStar, faCalendar, faClock, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const Banner = ({ mediaInfo }) => {
   const { openModal } = useModalContext();
@@ -67,19 +67,23 @@ const Banner = ({ mediaInfo }) => {
           ></div>
 
           {/* Content Section */}
-          <div className="pr-10 pl-10 pt-10  relative flex flex-col lg:flex-row justify-between items-center ">
+          <div className="pr-10 pl-10 pt-10  relative flex flex-col lg:flex-row  items-center ">
 
             {/* tên phim */}
             <h1 className="text-3xl lg:text-5xl font-bold">
               {mediaInfo?.name || "Title Not Available"}
             </h1>
+            <div className=" ml-5 font-semibold bg-yellow-500 text-white p-2 rounded-md">
+              {mediaInfo?.age + "+" || "N/A"}
+            </div>
+
           </div>
 
           <div className="relative flex flex-col lg:flex-row lg:p-10">
             {/* poster */}
-            <div className="relative inline-block w-48">
+            <div className="relative  w-48 flex items-center justify-center">
               <img
-                className="w-full rounded-lg shadow-lg"
+                className="w-full rounded-lg shadow-lg object-contain"
                 src={
                   mediaInfo?.imagePortrait
                     ? mediaInfo.imagePortrait
@@ -87,7 +91,7 @@ const Banner = ({ mediaInfo }) => {
                 }
                 alt={mediaInfo?.name || "Movie Poster"}
               />
-              <div className="absolute top-1 right-1 w-10 h-10">
+              {/* <div className="absolute top-1 right-1 w-10 h-10">
                 <CircularProgressBar
                   percent={Math.round(mediaInfo?.rate * 10)}
                   strokeColor={
@@ -98,67 +102,70 @@ const Banner = ({ mediaInfo }) => {
                         : "red"
                   }
                 />
-              </div>
+              </div> */}
             </div>
 
-            <div className="flex justify-center p-4">
-              <div className="lg:w-2/3 flex flex-col justify-center p-4">
+            <div className="flex justify-center p-2">
+              <div className="m-5 flex flex-col justify-center">
                 <p className="text-xl text-white mb-4">{mediaInfo?.tagline || ""}</p>
+                <div>  <FontAwesomeIcon icon={faCalendar} className="text-yellow-500" />
+                  {mediaInfo?.startDate
+                    ? new Date(mediaInfo.startDate).toLocaleDateString('en-GB') // Converts to date format: DD/MM/YYYY
+                    : "N/A"}
+                </div>
 
-                <div className="text-gray-400 text-sm lg:text-base mb-4">
-                  <span>{mediaInfo?.startDate || "N/A"}</span> |{" "}
-                  <span className="font-semibold">
+                <div className="text-white text-sm lg:text-base mb-4">
+
+                  <div className="font-semibold">
+                    <FontAwesomeIcon icon={faClock} className="text-yellow-500" />
                     {mediaInfo?.duration ? `${mediaInfo.duration} minutes` : "Not Available"}
-                  </span>{" "}
-                  |{" "}
-                  <span className="font-semibold">
-                    {mediaInfo?.age || "N/A"}
-                  </span>{" "}
-                  |{" "}
-                  <span className="font-semibold">
+                  </div>
+
+                  {/* <div className="font-semibold">
                     {mediaInfo?.slug || "N/A"}
-                  </span>
+                  </div> */}
                 </div>
 
                 <p className="text-white mb-4 leading-relaxed">
                   {mediaInfo?.overview || "No overview available."}
                 </p>
-                <div className="text-gray-400 text-sm lg:text-base mb-4">
-                  <span>
-                    Budget: $
-                    {mediaInfo?.budget ? mediaInfo.budget.toLocaleString() : "N/A"}
-                  </span>{" "}
-                  |{" "}
-                  <span>
-                    Revenue: $
-                    {mediaInfo?.revenue ? mediaInfo.revenue.toLocaleString() : "N/A"}
-                  </span>
-                  <div className="flex space-x-4 m-5">
-                    {mediaInfo?.genres?.map((genre, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 border border-white text-white text-sm rounded-full bg-white/10 backdrop-blur-md"
-                      >
-                        {genre.name}
-                      </span>
-                    ))}
-                  </div>
+                {/* <span>
+                  Budget: $
+                  {mediaInfo?.budget ? mediaInfo.budget.toLocaleString() : "N/A"}
+                </span>{" "}
+                |{" "}
+                <span>
+                  Revenue: $
+                  {mediaInfo?.revenue ? mediaInfo.revenue.toLocaleString() : "N/A"}
+                </span> */}
+                <div className="font-semibold flex items-center space-x-2">
+                  <span>Rate:</span>
+                  <span>{mediaInfo?.rate || "N/A"}</span>
+                  <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
                 </div>
-              </div>
-            </div>
+                <div className="flex space-x-4 m-5">
+                  {mediaInfo?.genres?.map((genre, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 border border-white text-white text-sm rounded-full bg-white/10 backdrop-blur-md"
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
+                </div>
+                {/* Trailer and Ticket Section */}
+                <div className="flex pb-1 flex-col justify-end h-full">
+                  <div>
+                    <div className="flex items-center space-x-4">
+                      <button
+                        onClick={handleTrailerClick}
+                        className="flex items-center px-5 py-3 text-white font-bold rounded-lg border-2 border-white bg-transparent shadow-md transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
+                      >
+                        <FontAwesomeIcon icon={faPlay} className="mr-2" />
+                        <span>Watch Trailer</span>
+                      </button>
 
-            {/* Trailer and Ticket Section */}
-            <div className="flex pb-1 flex-col justify-end h-full">
-              <div>
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={handleTrailerClick}
-                    className="flex items-center px-5 py-3 text-white font-bold rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
-                  >
-                    <FontAwesomeIcon icon={faPlay} className="mr-2" />
-                    <span>Watch Trailer</span>
-                  </button>
-                  {/* <Link to={`/book/${mediaInfo?.slug}`}>
+                      {/* <Link to={`/book/${mediaInfo?.slug}`}>
                     <button
                       className="flex items-center px-6 py-3 bg-white text-black font-semibold rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
                     >
@@ -166,10 +173,14 @@ const Banner = ({ mediaInfo }) => {
                       <span>BOOK TICKET</span>
                     </button>
                   </Link> */}
-                </div>
+                    </div>
 
+                  </div>
+                </div>
               </div>
             </div>
+
+
           </div>
         </>
       )}
