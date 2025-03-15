@@ -55,9 +55,9 @@ export const Header = () => {
         <div className="text-xl font-bold ">
             <Link className=" mr-5 hover:text-red-400" to="/"> Movies</Link>
             <Link className=" mr-5 hover:text-red-400" to="/Theaters"> Theaters</Link>
-            <Link className=" mr-5 hover:text-red-400" to="/Discount"> Discount</Link>
-            <Link className=" mr-5 hover:text-red-400" to="/Contact"> Contact</Link>
-            <Link className=" mr-5 hover:text-green-500 text-yellow-500" to="/booking"> BOOK NOW</Link>
+            <Link className=" mr-5 hover:text-red-400" to="/discount"> Discount</Link>
+            <Link className=" mr-5 hover:text-red-400" to="/contact-us"> Contact</Link>
+            <Link className=" mr-5 hover:text-green-500 text-yellow-500" to="/booking/ticketinfor"> BOOK NOW</Link>
           </div>
         {/* Nút Search bên phải cho màn hình lớn */}
         <div
