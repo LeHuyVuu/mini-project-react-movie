@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './BookingSeat.css';
 
 import SEATSJSON from './seats.json';
@@ -6,27 +6,14 @@ import SEATSJSON from './seats.json';
 export default function BookingSeat() {
 
     const data = SEATSJSON.data;
-    const seats = data.rows[12].seats;
 
-    const [SeatTable, setSeatTable] = useState(data);
+    const [ChosenSeat, setChosenSeat] = useState([]);
+
+    // const [SeatTable, setSeatTable] = useState(data);
 
     // const [SeatTable, setSeatTable] = useState(Array(data.maxRow).fill(0).map(() =>
     //     Array(data.maxColumn).fill(0).map(() => ({ value: 0 }))
     // ));
-
-    // useEffect(() => {
-    //     fetch("./seats.json") // Ensure this path is correct and the file is a valid JSON
-    //         .then((response) => {
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return response.json(); // Convert data from JSON
-    //         })
-    //         .then((result) => setData(result))
-    //         .catch((error) => console.error("Error fetching data:", error));
-    // }, []);
-
-    const [ChosenSeat, setChosenSeat] = useState([]);
 
     // const SeatTableExample = [
     //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -46,25 +33,106 @@ export default function BookingSeat() {
 
     const Alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
-    // const chooseSeat = (row, col) => {
-    //     if (SeatTableExample[row][col] === 1 || SeatTableExample[row][col] === 2) {
-    //         if (ChosenSeat.some(seat => seat[0] === row && seat[1] === col)) {
-    //             setChosenSeat(prev => prev.filter(seat => seat[0] !== row || seat[1] !== col))
-    //         } else {
-    //             setChosenSeat(prev => [...prev, [row, col]]);
-    //         }
-    //     }
-    // }
+    const chooseSeat = (name, id, row, col) => {
+        if (ChosenSeat.some(seat => seat[0] == name && seat[1] == id)) {
+            setChosenSeat(prev => prev.filter(seat => seat[0] !== name || seat[1] !== id))
+        } else if (ChosenSeat.length < 8) {
+            setChosenSeat(prev => [...prev, [name, id, row, col]]);
+            // if (checkValidSeat(ChosenSeat) === false) console.log('FALSE');
+        }
+    }
+
+    const checkValidSeat = () => {
+        console.log(ChosenSeat);
+        // const SortedChosenSeat = ChosenSeat.sort((a, b) => a[1] - b[1])
+        // console.log(SortedChosenSeat);
+        // const GroupedChosenSeat = ChosenSeat.reduce((acc, [name, id]) => {
+        //     if (!acc[name]) {
+        //         acc[name] = [];
+        //     }
+        //     acc[name].push(id);
+        //     return acc;
+        // }, {});
+        // console.log('Group 0', GroupedChosenSeat.D);
+        // for (let name in GroupedChosenSeat) {
+        //     if (GroupedChosenSeat[name].some((id, index) => index > 0 && id !== GroupedChosenSeat[name][index - 1] + 1)) {
+        //         console.log(`Group ${name} is not in ascending order`);
+        //     }
+        // }
+
+        for (let seat of ChosenSeat) {
+            console.log('seat', seat[0], seat[1]);
+            //Kiểm tra ô cách +2
+            if (data.rows.some(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] + 2))) {//Nếu ô +2 đó có thể đặt chỗ, có tồn tại
+                console.log('Nếu ô +2 đó có thể đặt chỗ, có tồn tại');
+                if (
+                    data.rows.find(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] + 2))?.seats.find(item => item.row == seat[2] && item.column == seat[3] + 2)?.status == 1 ||//Nếu ô +2 đó đã có người khác đặt
+                    ChosenSeat.some(item => item[2] == seat[2] && item[3] == seat[3] + 2)//Hoặc mình đặt
+                ) {
+                    console.log('Nếu ô +2 đó đã có người khác đặt Hoặc mình đặt');
+                    if (
+                        data.rows.find(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] + 1))?.seats.find(item => item.row == seat[2] && item.column == seat[3] + 1)?.status == 0 &&//Nếu ô ở giữa chưa có ai khác đặt
+                        !ChosenSeat.some(item => item[2] == seat[2] && item[3] == seat[3] + 1) &&//Và mình cũng không đặt
+                        data.rows.some(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] + 1))//Và có tồn tại
+                    ) {
+                        console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
+                        console.log('false');
+                        // return false;
+                    }
+                }
+            } else if (//Nếu ô +2 đó không thể đặt chỗ, không tồn tại
+                data.rows.find(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] + 1))?.seats.find(item => item.row == seat[2] && item.column == seat[3] + 1)?.status == 0 &&//Nếu ô ở giữa chưa có ai khác đặt
+                !ChosenSeat.some(item => item[2] == seat[2] && item[3] == seat[3] + 1) &&//Và mình cũng không đặt
+                data.rows.some(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] + 1))//Và có tồn tại
+            ) {
+                console.log('Nếu ô +2 đó không thể đặt chỗ, không tồn tại');
+                console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
+                console.log('false');
+                // return false;
+            }
+
+            //Kiểm tra ô cách -2
+            if (data.rows.some(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] - 2))) {//Nếu ô -2 đó có thể đặt chỗ, có tồn tại
+                console.log('Nếu ô -2 đó có thể đặt chỗ, có tồn tại');
+                if (
+                    data.rows.find(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] - 2))?.seats.find(item => item.row == seat[2] && item.column == seat[3] - 2)?.status == 1 ||//Nếu ô -2 đó đã có người khác đặt
+                    ChosenSeat.some(item => item[2] == seat[2] && item[3] == seat[3] - 2)//Hoặc mình đặt
+                ) {
+                    console.log('Nếu ô -2 đó đã có người khác đặt Hoặc mình đặt');
+                    if (
+                        data.rows.find(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] - 1))?.seats.find(item => item.row == seat[2] && item.column == seat[3] - 1)?.status == 0 &&//Nếu ô ở giữa chưa có ai khác đặt
+                        !ChosenSeat.some(item => item[2] == seat[2] && item[3] == seat[3] - 1) &&//Và mình cũng không đặt
+                        data.rows.some(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] - 1))//Và có tồn tại
+                    ) {
+                        console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
+                        console.log('false');
+                        // return false;
+                    }
+                }
+            } else if (//Nếu ô -2 đó không thể đặt chỗ, không tồn tại
+                data.rows.find(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] - 1))?.seats.find(item => item.row == seat[2] && item.column == seat[3] - 1)?.status == 0 &&//Nếu ô ở giữa chưa có ai khác đặt
+                !ChosenSeat.some(item => item[2] == seat[2] && item[3] == seat[3] - 1) &&//Và mình cũng không đặt
+                data.rows.some(row => row.seats.some(item => item.row == seat[2] && item.column == seat[3] - 1))//Và có tồn tại
+            ) {
+                console.log('Nếu ô -2 đó không thể đặt chỗ, không tồn tại');
+                console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
+                console.log('false');
+                // return false;
+            }
+        }
+        // console.log('true');
+        // return true;
+    }
 
     return (
         <div className='bookingseat-container'>
             <p>{JSON.stringify(ChosenSeat)} - {ChosenSeat.length}</p>
-            <p>{JSON.stringify(data.rows[0].seats[0])}</p>
-            <p>{JSON.stringify(data.rows[0].name)}</p>
-            <p>{JSON.stringify(seats)}</p>
+            {/* <p>{JSON.stringify(data.rows[0].seats[0])}</p> */}
+            {/* <p>{JSON.stringify(data.rows[0].name)}</p> */}
+            {/* <p>{JSON.stringify(seats)}</p> */}
             {/* <p>{JSON.stringify(seats.row)}</p> */}
             {/* <p>{JSON.stringify(seats.col)}</p> */}
-            <p>ID: {data.rows.some(row => row.seats.some(item => item.row == '12' && item.column == '2')) ? data.rows.find(row => row.seats.some(item => item.row == '12' && item.column == '2'))?.seats.find(item => item.row == '12' && item.column == '2')?.id : 'Not found'}</p>
+            {/* <p>ID: {data.rows.some(row => row.seats.some(item => item.row == '12' && item.column == '2')) ? data.rows.find(row => row.seats.some(item => item.row == '12' && item.column == '2'))?.seats.find(item => item.row == '12' && item.column == '2')?.id : 'Not found'}</p> */}
 
 
             <table
@@ -142,7 +210,7 @@ export default function BookingSeat() {
                                 className='name-row'
                                 style={{
                                     visibility: data.rows.some(row => row.seats.some(item => item.row == index_row)) ?
-                                        '' : 'hidden'
+                                        '' : 'hidden',
                                 }}
                             >
                                 {data.rows.some(row => row.seats.some(item => item.row == index_row)) ?
@@ -150,27 +218,87 @@ export default function BookingSeat() {
                                     :
                                     '...'}
                             </td>
+                            {/* /////////////////////////////////////////////////////////////////////////// */}
                             {[...Array(data.maxColumn)].map((_, index_col) => (
                                 <td
                                     key={index_col}
+                                    onClick={() => chooseSeat(
+                                        data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.name,
+                                        data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.id,
+                                        index_row,
+                                        index_col
+                                    )}
                                     style={{
                                         visibility: data.rows.some(row => row.seats.some(item => item.row == index_row && item.column == index_col)) ?
-                                            '' : 'hidden'
+                                            '' : 'hidden',
+
+                                        paddingRight: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                            data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[0].column == index_col ?
+                                            '0' : '',
+                                        paddingLeft: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                            data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[1].column == index_col ?
+                                            '0' : '',
                                     }}
                                 >
-                                    <p>
+                                    <p
+                                        style={{
+                                            backgroundColor: ChosenSeat.some(seat => seat[0] == data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.name && seat[1] == data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.id) ?
+                                                '#dc3545' : '',
+                                            color: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.status == 0 ?
+                                                '#fff' : '#555',
+                                            borderColor: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.status == 0 ?
+                                                '#fff' : '#555',
+
+                                            borderRightWidth: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                                data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[0].column == index_col ?
+                                                '0' : '',
+                                            borderLeftWidth: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                                data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[1].column == index_col ?
+                                                '0' : '',
+
+                                            borderTopRightRadius: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                                data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[0].column == index_col ?
+                                                '0' : '',
+                                            borderBottomRightRadius: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                                data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[0].column == index_col ?
+                                                '0' : '',
+                                            borderTopLeftRadius: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                                data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[1].column == index_col ?
+                                                '0' : '',
+                                            borderBottomLeftRadius: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.area == 2 &&
+                                                data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.seatsInGroup[1].column == index_col ?
+                                                '0' : '',
+                                        }}
+                                    >
                                         {data.rows.some(row => row.seats.some(item => item.row == index_row && item.column == index_col)) ?
-                                            data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.id
+                                            <span>
+                                                {data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.name}.
+                                                {data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.id}
+                                            </span>
                                             :
                                             '...'}
                                     </p>
                                 </td>
                             ))}
+                            {/* /////////////////////////////////////////////////////////////////////////// */}
+                            <td
+                                className='name-row'
+                                style={{
+                                    visibility: data.rows.some(row => row.seats.some(item => item.row == index_row)) ?
+                                        '' : 'hidden',
+                                }}
+                            >
+                                {data.rows.some(row => row.seats.some(item => item.row == index_row)) ?
+                                    data.rows.find(row => row.seats.some(item => item.row == index_row))?.name
+                                    :
+                                    '...'}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             <p className='screen'>SCREEN</p>
+            <button className='btn' onClick={() => checkValidSeat()}>NEXT</button>
         </div>
     )
 }
