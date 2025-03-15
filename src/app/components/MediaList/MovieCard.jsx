@@ -1,8 +1,8 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CircularProgressBar } from "./CircularProgressBar";
 
-export const MovieCard = ({ id, title, releaseDate, poster, point, mediaType }) => {
+export const MovieCard = ({ id, name, startDate, imagePortrait, rate, mediaType }) => {
   const [loading, setLoading] = useState(true);
 
   return (
@@ -36,8 +36,8 @@ export const MovieCard = ({ id, title, releaseDate, poster, point, mediaType }) 
 
         {/* Actual Image */}
         <img
-          src={`https://image.tmdb.org/t/p/original${poster}`}
-          alt={title}
+          src={imagePortrait}
+          alt={name}
           className="h-96 w-full object-cover"
           onLoad={() => setLoading(false)} // Hide loading when image loads
         />
@@ -70,13 +70,11 @@ export const MovieCard = ({ id, title, releaseDate, poster, point, mediaType }) 
 
           <div className="absolute bottom-4 left-4">
             <CircularProgressBar
-              percent={Math.round(point * 10)} // Tính phần trăm
-              strokeColor={
-                point >= 7 ? "green" : point >= 5 ? "orange" : "red"
-              }
+              percent={Math.round(rate * 10)} // Convert rating to percentage
+              strokeColor={rate >= 7 ? "green" : rate >= 5 ? "orange" : "red"}
             />
-            <h3 className="text-xl font-bold">{title}</h3>
-            <p className="text-gray-400 text-sm">{releaseDate}</p>
+            <h3 className="text-xl font-bold">{name}</h3>
+            <p className="text-gray-400 text-sm">{startDate}</p>
           </div>
         </div>
       </div>

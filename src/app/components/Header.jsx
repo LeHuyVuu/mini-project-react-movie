@@ -57,6 +57,7 @@ export const Header = () => {
             <Link className=" mr-5 hover:text-red-400" to="/Theaters"> Theaters</Link>
             <Link className=" mr-5 hover:text-red-400" to="/Discount"> Discount</Link>
             <Link className=" mr-5 hover:text-red-400" to="/Contact"> Contact</Link>
+            <Link className=" mr-5 hover:text-green-500 text-yellow-500" to="/booking"> BOOK NOW</Link>
           </div>
         {/* Nút Search bên phải cho màn hình lớn */}
         <div

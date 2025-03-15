@@ -8,14 +8,12 @@ const Banner = ({ mediaInfo }) => {
   const { openModal } = useModalContext();
 
   const handleTrailerClick = () => {
-    const trailer = mediaInfo?.videos?.results?.find(
+    const trailer = mediaInfo?.trailer || mediaInfo?.videos?.results?.find(
       (video) => video.type === "Trailer"
     );
 
-    const trailerVideoKey = trailer?.key || null;
-
-    const videoUrl = trailerVideoKey
-      ? `https://www.youtube.com/embed/${trailerVideoKey}`
+    const videoUrl = trailer
+      ? `https://www.youtube.com/embed/${trailer.key || trailer}`
       : "https://example.com/default-trailer.mp4";
 
     const modalContent = (
@@ -62,8 +60,8 @@ const Banner = ({ mediaInfo }) => {
           <div
             className="absolute inset-0 bg-cover bg-center opacity-40"
             style={{
-              backgroundImage: mediaInfo?.backdrop_path
-                ? `url('https://image.tmdb.org/t/p/original/${mediaInfo.backdrop_path}')`
+              backgroundImage: mediaInfo?.imageLandscape
+                ? `url('${mediaInfo.imageLandscape}')`
                 : `url('https://example.com/default-backdrop.jpg')`,
             }}
           ></div>
@@ -71,81 +69,69 @@ const Banner = ({ mediaInfo }) => {
           {/* Content Section */}
           <div className="pr-10 pl-10 pt-10  relative flex flex-col lg:flex-row justify-between items-center ">
 
-            {/*  tên phim */}
-            <h1 className="  text-3xl lg:text-5xl font-bold ">
-              {mediaInfo?.title || "Title Not Available"}
+            {/* tên phim */}
+            <h1 className="text-3xl lg:text-5xl font-bold">
+              {mediaInfo?.name || "Title Not Available"}
             </h1>
-
           </div>
-          <div className="relative flex flex-col lg:flex-row  lg:p-10">
 
+          <div className="relative flex flex-col lg:flex-row lg:p-10">
             {/* poster */}
-            <div className="">
-              <div className="relative inline-block w-48">
-                <img className=" w-full rounded-lg shadow-lg"
-                  src={
-                    mediaInfo?.poster_path
-                      ? `https://image.tmdb.org/t/p/original/${mediaInfo.poster_path}`
-                      : "https://example.com/default-poster.jpg"
+            <div className="relative inline-block w-48">
+              <img
+                className="w-full rounded-lg shadow-lg"
+                src={
+                  mediaInfo?.imagePortrait
+                    ? mediaInfo.imagePortrait
+                    : "https://example.com/default-poster.jpg"
+                }
+                alt={mediaInfo?.name || "Movie Poster"}
+              />
+              <div className="absolute top-1 right-1 w-10 h-10">
+                <CircularProgressBar
+                  percent={Math.round(mediaInfo?.rate * 10)}
+                  strokeColor={
+                    mediaInfo?.rate >= 7
+                      ? "green"
+                      : mediaInfo?.rate >= 5
+                        ? "orange"
+                        : "red"
                   }
-                  alt={mediaInfo?.title || "Movie Poster"}
                 />
-                <div className="absolute top-1 right-1 w-10 h-10 ">
-
-
-                  <CircularProgressBar
-                    percent={Math.round(mediaInfo.vote_average * 10)}
-                    strokeColor={
-                      mediaInfo.vote_average >= 7
-                        ? "green"
-                        : mediaInfo.vote_average >= 5
-                          ? "orange"
-                          : "red"
-                    }
-                  />
-                </div>
               </div>
-
             </div>
-            <div className="flex  justify-center p-4">
-              <div className="lg:w-2/3 flex flex-col justify-center p-4">
 
-                <p className="text-xl text-white mb-4">
-                  {mediaInfo?.tagline || ""}
-                </p>
+            <div className="flex justify-center p-4">
+              <div className="lg:w-2/3 flex flex-col justify-center p-4">
+                <p className="text-xl text-white mb-4">{mediaInfo?.tagline || ""}</p>
+
                 <div className="text-gray-400 text-sm lg:text-base mb-4">
-                  <span>
-                    {mediaInfo?.release_date || "N/A"}
+                  <span>{mediaInfo?.startDate || "N/A"}</span> |{" "}
+                  <span className="font-semibold">
+                    {mediaInfo?.duration ? `${mediaInfo.duration} minutes` : "Not Available"}
                   </span>{" "}
                   |{" "}
-                  <span className="font-semibold">{mediaInfo?.runtime
-                    ? `${mediaInfo.runtime} minutes`
-                    : "Not Available"} </span>{" "}
+                  <span className="font-semibold">
+                    {mediaInfo?.age || "N/A"}
+                  </span>{" "}
                   |{" "}
-                  <span className="font-semibold">{mediaInfo?.spoken_languages?.length > 0
-                    ? mediaInfo.spoken_languages
-                      .map((lang) => lang.name)
-                      .join(", ")
-                    : "N/A"} </span>
+                  <span className="font-semibold">
+                    {mediaInfo?.slug || "N/A"}
+                  </span>
                 </div>
 
-                {/* <h2 className="text-xl font-semibold mb-2">Overview</h2> */}
                 <p className="text-white mb-4 leading-relaxed">
                   {mediaInfo?.overview || "No overview available."}
                 </p>
                 <div className="text-gray-400 text-sm lg:text-base mb-4">
                   <span>
                     Budget: $
-                    {mediaInfo?.budget
-                      ? mediaInfo.budget.toLocaleString()
-                      : "N/A"}
+                    {mediaInfo?.budget ? mediaInfo.budget.toLocaleString() : "N/A"}
                   </span>{" "}
                   |{" "}
                   <span>
                     Revenue: $
-                    {mediaInfo?.revenue
-                      ? mediaInfo.revenue.toLocaleString()
-                      : "N/A"}
+                    {mediaInfo?.revenue ? mediaInfo.revenue.toLocaleString() : "N/A"}
                   </span>
                   <div className="flex space-x-4 m-5">
                     {mediaInfo?.genres?.map((genre, index) => (
@@ -157,35 +143,32 @@ const Banner = ({ mediaInfo }) => {
                       </span>
                     ))}
                   </div>
-
                 </div>
-                </div>
-                <div className="flex pb-1 flex-col justify-end h-full ">
+              </div>
+            </div>
 
-                  <div>
-                    {mediaInfo?.homepage && (
-                      <div className="flex items-center space-x-4">
-                        <button
-                          onClick={handleTrailerClick}
-                          className="flex items-center px-5 py-3  text-white font-bold rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
-                        >
-                          <FontAwesomeIcon icon={faPlay} className="mr-2" />
-                          <span>Watch Trailer</span>
-                        </button>
-                        <Link to="/booking">
-                          <button
-                            className="flex items-center px-6 py-3 bg-white text-black font-semibold rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
-                          >
-                            <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-                            <span>BOOK TICKET</span>
-                          </button>
-
-                        </Link>
-                      </div>
-                    )}
-                  </div>
+            {/* Trailer and Ticket Section */}
+            <div className="flex pb-1 flex-col justify-end h-full">
+              <div>
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={handleTrailerClick}
+                    className="flex items-center px-5 py-3 text-white font-bold rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <FontAwesomeIcon icon={faPlay} className="mr-2" />
+                    <span>Watch Trailer</span>
+                  </button>
+                  {/* <Link to={`/book/${mediaInfo?.slug}`}>
+                    <button
+                      className="flex items-center px-6 py-3 bg-white text-black font-semibold rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
+                    >
+                      <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+                      <span>BOOK TICKET</span>
+                    </button>
+                  </Link> */}
                 </div>
-            
+
+              </div>
             </div>
           </div>
         </>

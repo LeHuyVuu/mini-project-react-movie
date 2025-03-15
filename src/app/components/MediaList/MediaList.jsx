@@ -1,15 +1,16 @@
-import { useState } from "react";
 import { MovieCard } from "./MovieCard";
-import useFetch from "../../hooks/useFetch";
+
 import "./MediaList.css";
+import dataMovies from "../../../mocks/movies.json"
+import dataMoviesCooming from "../../../mocks/comming.json"
 const MediaList = ({ TABS, Title }) => {
 
-    const [activeTabId, setActiveTabId] = useState(TABS[0]?.id);
 
-    const url = TABS.find(tab => tab.id === activeTabId)?.url
-    const { data } = useFetch({ url })
-    const mediaList = (data.results || []).slice(0, 12);
-    console.log({ mediaList });
+
+
+    const mediaList = (dataMovies.data.result || []);
+   
+    const mediaListCooming = (dataMoviesCooming.data.result || []);
 
 
     //code này để test thử sau có api xóa điii
@@ -74,17 +75,21 @@ const MediaList = ({ TABS, Title }) => {
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr p-4">
                     {mediaList.map((media) => (
                         <MovieCard
-                            id={media.id}
                             key={media.id}
-                            title={media.title}
-                            releaseDate={media.release_date}
-                            poster={media.poster_path}
-                            point={media.vote_average}
-                            mediaType={media.media_type}
+                            id={media.id}
+                            name={media.name}
+                            startDate={media.startDate}
+                            imagePortrait={media.imagePortrait}
+                            rate={media.rate}
+                            mediaType={media.mediaType}
                         />
                     ))}
+
                 </div>
             </div>
+
+
+
             <div className="px-8 py-10 bg-black text-white">
                 <div className="flex flex-col items-start gap-4">
                     {/* Phần tiêu đề */}
@@ -106,15 +111,15 @@ const MediaList = ({ TABS, Title }) => {
                 </ul> */}
                 </div>
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr p-4">
-                    {mediaList.map((media) => (
+                    {mediaListCooming.map((media) => (
                         <MovieCard
-                            id={media.id}
                             key={media.id}
-                            title={media.title}
-                            releaseDate={media.release_date}
-                            poster={media.poster_path}
-                            point={media.vote_average}
-                            mediaType={media.media_type}
+                            id={media.id}
+                            name={media.name}
+                            startDate={media.startDate}
+                            imagePortrait={media.imagePortrait}
+                            rate={media.rate}
+                            mediaType={media.mediaType}
                         />
                     ))}
                 </div>
