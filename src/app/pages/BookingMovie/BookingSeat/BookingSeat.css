@@ -3,10 +3,10 @@
     min-height: 100vh;
     padding: 40px 0;
     text-align: center;
-    /* font-family: 'Quicksand', Arial, sans-serif; */
+    font-family:'Times New Roman', Times, serif;
 
     color: #fff;
-    background-color: #111;
+    background-color: #222;
 
     table {
         display: block;
@@ -62,13 +62,33 @@
         font-weight: bold;
     }
 
-    .btn {
-        display: block;
-        justify-self: end;
-        margin: 10px 60px;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-weight: bold;
-        background-color: #dc3545;
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .btn {
+            width: 120px;
+            margin: 10px 60px;
+            padding: 8px 16px;
+            display: block;
+            justify-self: end;
+            border-radius: 8px;
+            font-weight: bold;
+            background-color: #dc3545;
+        }
+
+        .btn-none {
+            background-color: #dc354680;
+        }
     }
+}
+
+@font-face {
+    font-family: 'MyFont';
+    src: url('assets/fonts/font.woff2') format('woff2'),
+        url('assets/fonts/font.woff') format('woff'),
+        url('assets/fonts/font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }

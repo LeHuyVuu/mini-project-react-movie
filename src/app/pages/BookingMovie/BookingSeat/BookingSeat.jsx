@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './BookingSeat.css';
 
 import SEATSJSON from './seats.json';
 
 export default function BookingSeat() {
+    const navigate = useNavigate();
 
     const data = SEATSJSON.data;
 
@@ -77,7 +79,7 @@ export default function BookingSeat() {
                     ) {
                         console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
                         console.log('false');
-                        // return false;
+                        return false;
                     }
                 }
             } else if (//Nếu ô +2 đó không thể đặt chỗ, không tồn tại
@@ -88,7 +90,7 @@ export default function BookingSeat() {
                 console.log('Nếu ô +2 đó không thể đặt chỗ, không tồn tại');
                 console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
                 console.log('false');
-                // return false;
+                return false;
             }
 
             //Kiểm tra ô cách -2
@@ -106,7 +108,7 @@ export default function BookingSeat() {
                     ) {
                         console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
                         console.log('false');
-                        // return false;
+                        return false;
                     }
                 }
             } else if (//Nếu ô -2 đó không thể đặt chỗ, không tồn tại
@@ -117,11 +119,14 @@ export default function BookingSeat() {
                 console.log('Nếu ô -2 đó không thể đặt chỗ, không tồn tại');
                 console.log('Nếu ô ở giữa chưa có ai khác đặt Và mình cũng không đặt Và có tồn tại');
                 console.log('false');
-                // return false;
+                return false;
             }
         }
-        // console.log('true');
-        // return true;
+
+        if (ChosenSeat.length <= 0) return false;
+
+        console.log('true');
+        return true;
     }
 
     return (
@@ -243,7 +248,7 @@ export default function BookingSeat() {
                                     <p
                                         style={{
                                             backgroundColor: ChosenSeat.some(seat => seat[0] == data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.name && seat[1] == data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.id) ?
-                                                '#dc3545' : '',
+                                                '#dc3545' : 'transparent',
                                             color: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.status == 0 ?
                                                 '#fff' : '#555',
                                             borderColor: data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.status == 0 ?
@@ -272,7 +277,7 @@ export default function BookingSeat() {
                                     >
                                         {data.rows.some(row => row.seats.some(item => item.row == index_row && item.column == index_col)) ?
                                             <span>
-                                                {data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.name}.
+                                                {data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.name}
                                                 {data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.id}
                                             </span>
                                             :
@@ -297,8 +302,21 @@ export default function BookingSeat() {
                     ))}
                 </tbody>
             </table>
-            <p className='screen'>SCREEN</p>
-            <button className='btn' onClick={() => checkValidSeat()}>NEXT</button>
+
+            <p className='screen'>MÀN HÌNH</p>
+            {/* <button className='btn' onClick={() => checkValidSeat()}>NEXT</button> */}
+
+            <div className='button-container'>
+                <button className='btn btn-back' onClick={() => navigate(-1)}>BACK</button>
+
+                {checkValidSeat() === true ?
+                    <Link to={'/booking/offer'}>
+                        <button className='btn'>NEXT</button>
+                    </Link>
+                    :
+                    <button className='btn btn-none'>NEXT</button>
+                }
+            </div>
         </div>
     )
 }
