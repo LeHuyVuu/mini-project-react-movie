@@ -1,13 +1,16 @@
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faPlay, faStar, faCalendarAlt, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+
 
 const Movie = (props) => {
     const { data } = props;
 
+
     if (!data) {
         return null; // Trả về null nếu data không tồn tại
     }
+
 
     const {
         id,
@@ -30,75 +33,145 @@ const Movie = (props) => {
         overview
     } = data;
 
-    return (
-        <div className="relative">
-            {/* Sử dụng imageLandscape từ dữ liệu JSON */}
-            <h1 className='text-red-500'>{id} ---- id here</h1>
-            <img
-                src={imageLandscape}
-                alt={name}
-                className="aspect-video brightness-50 w-full object-cover"
-            />
-            <div className="absolute bottom-[20%] left-8 w-1/2 text-white sm:w-1/3 space-y-4">
-                {/* Tiêu đề */}
-                <p className="font-extrabold text-3xl lg:text-5xl leading-tight tracking-wide sm:text-[3vw] mb-2 drop-shadow-md">
-                    {name}
-                </p>
-                
-                {/* Ngày phát hành */}
-                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    Start Date: {startDate}
-                </p>
-                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    End Date: {endDate}
-                </p>
 
-                {/* Thông tin bổ sung */}
-                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    Age Rating: {age}+
-                </p>
-                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    Duration: {duration} min
-                </p>
-                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    Views: {views}
-                </p>
-                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    IMAX: {isImax ? "Yes" : "No"}
-                </p>
-                <p className="text-[1.2vw] lg:text-lg font-semibold text-gray-300">
-                    Session Available: {isSession ? "Yes" : "No"}
-                </p>
-                
-                {/* Rating và tổng lượt vote */}
-                <div className="flex items-center text-[1.2vw] lg:text-base text-gray-300">
-                    <p className="font-semibold mr-2">Rating:</p>
-                    <p>{rate} / 10 ({totalVotes} votes)</p>
-                </div>
-                
-                {/* Overview */}
-                <div className="hidden sm:block text-[1.2vw] lg:text-base text-gray-200 mb-3 mt-4 leading-relaxed">
-                    <p className="font-semibold mb-2">Overview</p>
-                    <p className="line-clamp-3">{overview}</p>
-                </div>
-                
-                {/* Button */}
-                <div className="mt-4">
-                    <Link to={`/movie/${id}`}>
-                        <button className="text-white font-bold py-2 px-6 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out text-xs lg:text-sm mr-4">
-                            View Details
-                        </button>
-                    </Link>
-                    <Link to={`/booking`}>
-                        <button className="bg-white text-black font-extrabold py-2 px-6 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out text-xs lg:text-sm">
-                            <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-                            BOOK NOW
-                        </button>
-                    </Link>
+    // // Format duration to display in hours and minutes
+    const formatDuration = (mins) => {
+        if (!mins) return "N/A";
+        const hours = Math.floor(mins / 60);
+        const minutes = mins % 60;
+        return `${hours}h ${minutes}m`;
+    };
+
+
+    // Get year from date string
+    const getYear = (dateString) => {
+        if (!dateString) return "";
+        return new Date(dateString).getFullYear();
+    };
+
+
+    // Generate stars based on rating
+    const renderStars = (rating) => {
+        const stars = [];
+        const fullStars = Math.floor(rating / 2);
+        const halfStar = rating % 2 >= 1;
+       
+        for (let i = 0; i < 5; i++) {
+            if (i < fullStars) {
+                stars.push(<FontAwesomeIcon key={i} icon={faStar} className="text-yellow-400" />);
+            } else if (i === fullStars && halfStar) {
+                stars.push(<FontAwesomeIcon key={i} icon={faStar} className="text-yellow-400 opacity-60" />);
+            } else {
+                stars.push(<FontAwesomeIcon key={i} icon={faStar} className="text-gray-500" />);
+            }
+        }
+        return stars;
+    };
+
+
+    return (
+        <Link to={`/movie/${id}`} className="block relative">
+            <div className="relative banner-container h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden">
+                {/* Premium gradient overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/30 z-10"></div>
+               
+                {/* Background image with parallax effect */}
+                <img
+                    src={imageLandscape}
+                    alt={name}
+                    className="w-full h-full object-cover object-center transform scale-105 transition-transform duration-10000 ease-in-out hover:scale-100"
+                />
+               
+                {/* Content overlay */}
+                <div className="absolute inset-0 z-20 flex items-end">
+                    <div className="container mx-auto px-4 pb-16 md:pb-24">
+                        <div className="flex flex-col md:flex-row items-start gap-8">
+                            {/* Movie Poster */}
+                            <div className="hidden md:block w-1/4 lg:w-1/5">
+                                <img
+                                    src={imagePortrait || imageLandscape}
+                                    alt={`${name} poster`}
+                                    className="rounded-lg shadow-2xl border-2 border-gray-800 transform transition-all duration-300 hover:scale-105"
+                                />
+                            </div>
+                           
+                            {/* Movie Info */}
+                            <div className="w-full md:w-2/3 text-white space-y-4">
+                                {/* Movie title with professional typography */}
+                                <h1 className="font-extrabold text-4xl md:text-5xl lg:text-6xl leading-none tracking-tight text-white mb-2 drop-shadow-lg">
+                                    {name} <span className="text-sm font-light align-top">{getYear(startDate)}</span>
+                                </h1>
+                               
+                                {/* Movie metadata badges */}
+                                <div className="flex flex-wrap gap-3 items-center">
+                                    {age && (
+                                        <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                            {age}+
+                                        </span>
+                                    )}
+                                    {duration && (
+                                        <span className="text-gray-300 text-sm flex items-center">
+                                            <FontAwesomeIcon icon={faClock} className="mr-1" />
+                                            {formatDuration(duration)}
+                                        </span>
+                                    )}
+                                    {isImax && (
+                                        <span className="bg-blue-700 text-white text-xs font-bold px-3 py-1 rounded">
+                                            IMAX
+                                        </span>
+                                    )}
+                                    {isSession && (
+                                        <span className="bg-purple-700 text-white text-xs font-bold px-3 py-1 rounded">
+                                            LIVE
+                                        </span>
+                                    )}
+                                </div>
+                               
+                                {/* Rating with star visualization */}
+                                <div className="flex items-center gap-4">
+                                    <div className="flex items-center">
+                                        <span className="text-yellow-400 font-bold mr-2">{rate}</span>
+                                        <div className="flex">
+                                            {renderStars(rate)}
+                                        </div>
+                                    </div>
+                                    <span className="text-gray-400 text-sm">
+                                        {totalVotes.toLocaleString()} votes
+                                    </span>
+                                    <span className="text-gray-400 text-sm">
+                                        {views.toLocaleString()} views
+                                    </span>
+                                </div>
+                               
+                                {/* Movie description/overview */}
+                                {overview && (
+                                    <p className="text-gray-300 text-sm md:text-base line-clamp-3 md:line-clamp-4 max-w-2xl">
+                                        {overview}
+                                    </p>
+                                )}
+                               
+                                {/* Showing dates */}
+                                <div className="flex items-center text-sm text-gray-300">
+                                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-red-500" />
+                                    <span> {startDate} - {endDate}</span>
+                                </div>
+                               
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 
+
 export default Movie;
+
+
+
+
+
+
+

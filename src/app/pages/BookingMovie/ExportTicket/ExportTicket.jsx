@@ -202,10 +202,10 @@ function ExportTicket() {
         </div>
         
         {/* Scissors Line */}
-        <div className="relative py-2 flex items-center bg-gray-900 bg-opacity-80">
-          <div className="flex-1 border-t border-dashed border-gray-700"></div>
-          <div className="absolute -left-3 bg-black rounded-full w-6 h-6"></div>
-          <div className="absolute -right-3 bg-black rounded-full w-6 h-6"></div>
+        <div className="relative py-2 flex items-center bg-gray-900 bg-opacity-80 mx-2">
+          <div className="flex-1 border-t border-dashed border-gray-700 "></div>
+          <div className="absolute -left-3 bg-transparent rounded-full w-6 h-6"></div>
+          <div className="absolute -right-3 bg-transparent rounded-full w-6 h-6"></div>
         </div>
         
         {/* Barcode Card */}

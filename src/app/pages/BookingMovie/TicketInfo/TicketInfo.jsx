@@ -175,12 +175,12 @@ export default function BookingPage() {
                                 {availableDates.map((date, index) => (
                                     <div key={index} className="relative">
                                         <Button
-                                            type={selectedDate === date.toISOString() ? 'primary' : 'default'}
-                                            onClick={() => handleDateChange(date.toLocaleDateString())}
+                                            type={selectedDate === format(date, 'dd/MM/yyyy') ? 'primary' : 'default'}
+                                            onClick={() => handleDateChange(format(date, 'dd/MM/yyyy'))}
                                         >
-                                            {date.toLocaleDateString()}
+                                            {format(date, 'dd/MM/yyyy')}
                                         </Button>
-                                        {selectedDate === date.toISOString() && (
+                                        {selectedDate ===format(date, 'dd/MM/yyyy') && (
                                             <div className="absolute top-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs">
                                                 Selected
                                             </div>

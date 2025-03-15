@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import payments from '../../../../mocks/payments.json';
 
 
 const galaxyBackgroundStyle = {
@@ -105,40 +105,11 @@ export default function Payment() {
     isSession: 0,
   };
 
-  const paymentMethods = [
-    {
-      id: "hsbc",
-      paymentName: "HSBC/Payoo - ATM/VISA/MASTER/JCB/QRCODE",
-      image: "https://cdn.galaxycine.vn/media/2020/10/20/hsbc-icon_1603203578522.png",
-    },
-    {
-      id: "shopeepay",
-      paymentName: "Ví ShopeePay - Giảm 10K cho tất cả giao dịch",
-      image: "https://cdn.galaxycine.vn/media/2022/4/29/shopee-pay_1651229746140.png",
-    },
-    {
-      id: "momo",
-      paymentName: "Ví Điện Tử MoMo",
-      image: "https://cdn.galaxycine.vn/media/2020/10/20/momo-icon_1603203874499.png",
-    },
-    {
-      id: "zalopay",
-      paymentName: "Zalopay - Bạn mới Zalopay nhập mã GIAMSAU - Giảm 50% tối đa 40k",
-      image: "https://cdn.galaxycine.vn/media/2024/7/10/zalopay_1720600308412.png",
-    },
-    {
-      id: "onepay",
-      paymentName: "OnePay - Visa, Master, JCB,... / ATM / QR Ngân hàng / Apple Pay",
-      image: "https://cdn.galaxycine.vn/media/2024/9/27/logo-onepay500x500_1727411425335.png",
-    },
-    {
-      id: "vnpay",
-      paymentName: "VNPAY",
-      image: "https://cdn.galaxycine.vn/media/2021/12/2/download_1638460623615.png",
-    }
-  ];
+ 
+  
 
   const formatDuration = (minutes) => {
+   
     if (!minutes || minutes <= 0) return "Duration not available";
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -299,7 +270,7 @@ export default function Payment() {
               <p className="text-gray-300 mb-4">Vui lòng chọn một phương thức thanh toán bên dưới để tiếp tục:</p>
              
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {paymentMethods.map((method) => (
+                {payments.data.result.map((method) => (
                   <div
                     key={method.id}
                     className={`border overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer rounded-xl ${
