@@ -19,15 +19,16 @@ export const Header = () => {
   }, []);
 
   return (
-    <div >
-      <header className="h-14 lg:h-20 bg-black flex justify-between  px-4 sm:px-6 lg:px-8 text-white relative">
+    <div  className="">
+      <header className=" bg-black flex justify-between px-4 sm:px-6 lg:px-8 text-white ">
+
         {/* Logo và Menu chính giữa */}
         
             {/* Logo */}
           <Link to="/">
             <img
               src="src\app\assets\img\jurassic.jpg"
-              className="w-8 sm:w-10 lg:w-12 rounded-full"  // Xóa các lớp liên quan đến hiệu ứng zoom
+              className="w-20  object-fit rounded-full"  // Xóa các lớp liên quan đến hiệu ứng zoom
               alt="Logo"
             />
           </Link>
