@@ -6,21 +6,8 @@ import { TRENDING_TABS } from "../../libs/constant";
 function HomePage() {
   return (
     <div>
-      <motion.div
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, ease: "easeInOut" }}
-      >
-        <FeatureMovies />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, ease: "easeInOut" }}
-      >
-        <MediaList TABS={TRENDING_TABS} Title="NOW SHOWING" />
-      </motion.div>
+      <FeatureMovies />
+      <MediaList TABS={TRENDING_TABS} Title="NOW SHOWING" />
     </div>
   );
 }
