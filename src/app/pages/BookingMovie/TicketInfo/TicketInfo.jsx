@@ -42,7 +42,7 @@ const cinemaData = [
 ];
 const dateOptions = ['Friday 21/03', 'Saturday 22/03', 'Sunday 23/03'];
 
-export default function BookingPage() {
+export default function BookingPage({bookingmovie}) {
     const [selectedCity, setSelectedCity] = useState('');
     const [selectedCinema, setSelectedCinema] = useState('');
     const [selectedMovie, setSelectedMovie] = useState('');
@@ -84,7 +84,18 @@ export default function BookingPage() {
     const handleShowtimeChange = (showtime) => {
         setSelectedShowtime(showtime);
     };
-
+  const getShowtimesForSelectedCinemaAndMovie = () => {
+        if (selectedCinema && selectedMovie && selectedDate) {
+            const cinema = cinemaData.find((cinema) => cinema.name === selectedCinema);
+            if (cinema) {
+                const showtimes = cinema.showtimes[selectedDate];
+                if (showtimes) {
+                    return showtimes[selectedMovie] || [];
+                }
+            }
+        }
+        return [];
+    };
     return (
         <div className="container mx-auto p-6 flex justify-center">
             <div className="w-full max-w-4xl space-y-8">
