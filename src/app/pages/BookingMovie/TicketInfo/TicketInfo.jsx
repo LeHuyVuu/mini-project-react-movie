@@ -6,6 +6,8 @@ import cinemaDataFromFile from '../../../../mocks/cinemas.json';
 import cityDataFromFile from '../../../../mocks/locations.json';
 import movieDataFromFile from '../../../../mocks/movies.json';
 import sessionsDataFromFile from '../../../../mocks/sessions.json';
+import { sTicketInfo } from '../../../context/Store';
+import { values } from 'lodash';
 const { Panel } = Collapse;
 
 
@@ -24,6 +26,7 @@ export default function BookingPage() {
     }, [selectedCity, selectedMovie]);
 
     const handleCityChange = (city) => {
+
         setSelectedCity(city.id);
         console.log(`Đây là id của city đã chọn: ${city.id}`);
         setSelectedCinema('');
@@ -34,6 +37,10 @@ export default function BookingPage() {
     };
 
     const handleCinemaChange = (cinema) => {
+        sTicketInfo.set((prev) => {
+            prev.value.cinema.name = cinema.name;
+            prev.value.cinema.id = cinema.id;
+        })
         setSelectedCinema(cinema.id);
         console.log(`Đây là id của cinema đã chọn: ${cinema.id}`);
         setSelectedShowtime('');
@@ -41,6 +48,13 @@ export default function BookingPage() {
     };
 
     const handleMovieChange = (movie) => {
+        sTicketInfo.set((prev) => {
+            prev.value.movie.name = movie.name;
+            prev.value.movie.imageLandscape = movie.imageLandscape;
+            prev.value.movie.imagePortrait = movie.imagePortrait;
+            prev.value.movie.age = movie.age;
+            prev.value.movie.duration = movie.duration;
+        })
         setSelectedMovie(movie.id);
         console.log(`Đây là id của phim đã chọn: ${movie.id}`);
         setActiveKey((prev) => [...prev, '4']); // Automatically open the date step after selecting movie
@@ -54,6 +68,13 @@ export default function BookingPage() {
     };
 
     const handleShowtimeChange = (showtime) => {
+        sTicketInfo.set((prev) => {
+            prev.value.session.id = showtime.id;
+            prev.value.session.screenName = showtime.screenName;
+            prev.value.session.sessionDate = showtime.showDate + " " + showtime.showTime;;
+
+        })
+        console.log(`Đây là suất chiếu đã chọn: ${showtime}`);
         setSelectedShowtime(showtime);
     };
 
@@ -70,9 +91,14 @@ export default function BookingPage() {
         })
         : [];
 
+
+
+
+
     return (
         <div className="container mx-auto p-6 flex justify-center">
             <div className="w-full max-w-4xl space-y-8">
+                <sTicketInfo.DevTool name='sTicketInfo' />
                 {/* Step 1: Location Selector */}
                 <Collapse activeKey={activeKey} expandIconPosition="start">
                     <Panel header="Select Location" key="1">
@@ -188,13 +214,13 @@ export default function BookingPage() {
                                             <div key={session.id} className="mb-4">
                                                 <div className="text-lg font-bold">{session.cinema.name}</div> {/* Tên rạp */}
                                                 <div className="text-sm text-gray-600">{`Format: ${session.movieFormat}`}</div> {/* Định dạng phim */}
-                                                <div className="text-sm text-gray-600">{`Screen: ${session.screenName}`}</div> {/* Tên màn chiếu */}
+                                                <div className="text-sm text-red-600">{`Screen: ${session.screenName}`}</div> {/* Tên màn chiếu */}
                                                 <div className="text-sm text-gray-600">{`Time: ${session.showTime}`}</div> {/* Giờ chiếu */}
                                                 <div className="text-sm text-gray-600">{`Seats available: ${session.totalSeat - session.bookedSeat}`}</div> {/* Ghế còn lại */}
                                                 <div className="flex flex-wrap gap-2 justify-center">
                                                     <Button
                                                         type={selectedShowtime === session.showTime ? 'primary' : 'default'}
-                                                        onClick={() => handleShowtimeChange(session.showTime)}
+                                                        onClick={() => handleShowtimeChange(session)}
                                                     >
                                                         {session.showTime}
                                                     </Button>
