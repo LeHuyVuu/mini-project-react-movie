@@ -8,38 +8,17 @@ export default function BookingSeat() {
     const navigate = useNavigate();
 
     const data = SEATSJSON.data;
-
     const [ChosenSeat, setChosenSeat] = useState([]);
 
-    // const [SeatTable, setSeatTable] = useState(data);
-
-    // const [SeatTable, setSeatTable] = useState(Array(data.maxRow).fill(0).map(() =>
-    //     Array(data.maxColumn).fill(0).map(() => ({ value: 0 }))
-    // ));
-
-    // const SeatTableExample = [
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 0],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 0],
-    //     [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1],
-    //     [1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
-    //     [2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2],
-    //     [0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0]
-    // ]
-
-    const Alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-
-    const chooseSeat = (name, id, row, col) => {
+    const chooseSeat = (name, id, index_row, index_col) => {
         if (ChosenSeat.some(seat => seat[0] == name && seat[1] == id)) {
             setChosenSeat(prev => prev.filter(seat => seat[0] !== name || seat[1] !== id))
-        } else if (ChosenSeat.length < 8) {
-            setChosenSeat(prev => [...prev, [name, id, row, col]]);
+        } else if (
+            ChosenSeat.length < 8
+            &&
+            data.rows.find(row => row.seats.some(item => item.row == index_row && item.column == index_col))?.seats.find(item => item.row == index_row && item.column == index_col)?.status == 0
+        ) {
+            setChosenSeat(prev => [...prev, [name, id, index_row, index_col]]);
             // if (checkValidSeat(ChosenSeat) === false) console.log('FALSE');
         }
     }
@@ -134,7 +113,7 @@ export default function BookingSeat() {
             <p>{JSON.stringify(ChosenSeat)} - {ChosenSeat.length}</p>
             {/* <p>{JSON.stringify(data.rows[0].seats[0])}</p> */}
             {/* <p>{JSON.stringify(data.rows[0].name)}</p> */}
-            {/* <p>{JSON.stringify(seats)}</p> */}
+            <p>{JSON.stringify(data.rows.find(row => row.seats.some(item => item.row == 4 && item.column == 13))?.seats.find(item => item.row == 4 && item.column == 13)?.status)}</p>
             {/* <p>{JSON.stringify(seats.row)}</p> */}
             {/* <p>{JSON.stringify(seats.col)}</p> */}
             {/* <p>ID: {data.rows.some(row => row.seats.some(item => item.row == '12' && item.column == '2')) ? data.rows.find(row => row.seats.some(item => item.row == '12' && item.column == '2'))?.seats.find(item => item.row == '12' && item.column == '2')?.id : 'Not found'}</p> */}
@@ -147,67 +126,6 @@ export default function BookingSeat() {
                     // '--table-height': 0,
                 }}
             >
-                {/* <tbody>
-                    {[...Array(SeatTableExample.length)].map((_, index_row) => (
-                        <tr key={index_row}>
-                            <td className='name-row'>{Alphabet[index_row]}</td>
-                            {[...Array(SeatTableExample[0].length)].map((_, index_col) => (
-                                <td
-                                    key={index_col}
-                                    onClick={() => { chooseSeat(index_row, index_col) }}
-                                    style={{
-                                        paddingRight: (index_col + 1 < SeatTableExample[0].length && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col + 1] === 2) ? '0' : '',
-                                        paddingLeft: (index_col - 1 >= 0 && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col - 1] === 2) ? '0' : '',
-                                        visibility: SeatTableExample[index_row][index_col] === 0 ? 'hidden' : '',
-                                    }}
-                                >
-                                    <p style={{
-                                        backgroundColor:
-                                            ChosenSeat.some(seat => seat[0] === index_row && seat[1] === index_col) ?
-                                                '#dc3545'
-                                                :
-                                                (SeatTableExample[index_row][index_col] === 4 ?
-                                                    '#ffc107'
-                                                    :
-                                                    (
-                                                        SeatTableExample[index_row][index_col] === 3 ?
-                                                            '#222'
-                                                            :
-                                                            (
-                                                                SeatTableExample[index_row][index_col] === 2 ?
-                                                                    '#222'
-                                                                    :
-                                                                    (
-                                                                        SeatTableExample[index_row][index_col] === 1 ?
-                                                                            '#222'
-                                                                            :
-                                                                            'transparent'
-                                                                    )
-                                                            )
-                                                    )
-                                                ),
-                                        color: SeatTableExample[index_row][index_col] === 3 ? '#555' : '',
-                                        borderColor: SeatTableExample[index_row][index_col] === 3 ? '#555' : '',
-
-                                        borderRightWidth: (index_col + 1 < SeatTableExample[0].length && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col + 1] === 2) ? '0' : '',
-                                        borderLeftWidth: (index_col - 1 >= 0 && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col - 1] === 2) ? '0' : '',
-
-                                        borderTopRightRadius: (index_col + 1 < SeatTableExample[0].length && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col + 1] === 2) ?
-                                            '0' : '',
-                                        borderBottomRightRadius: (index_col + 1 < SeatTableExample[0].length && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col + 1] === 2) ?
-                                            '0' : '',
-                                        borderTopLeftRadius: (index_col - 1 >= 0 && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col - 1] === 2) ?
-                                            '0' : '',
-                                        borderBottomLeftRadius: (index_col - 1 >= 0 && SeatTableExample[index_row][index_col] === 2 && SeatTableExample[index_row][index_col - 1] === 2) ?
-                                            '0' : '',
-                                    }}>
-                                        {Alphabet[index_row]}{index_col + 1}
-                                    </p>
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody> */}
                 <tbody>
                     {[...Array(data.maxRow)].map((_, index_row) => (
                         <tr key={index_row}>
